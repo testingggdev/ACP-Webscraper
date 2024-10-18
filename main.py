@@ -6,9 +6,6 @@ from urllib.parse import urljoin, urlparse
 
 
 CRAWLBASE_JS_TOKEN = 'Kgqhjo_5R_0BOYrJrNLLAA'
-#add the website url
-TARGET_URL = 'https://www.csit.gov.sg/'
-API_URL = f'https://api.crawlbase.com/?token={CRAWLBASE_JS_TOKEN}&url={TARGET_URL}'
 
 # Track visited URLs to avoid crawling the same page multiple times
 visited_urls = set()
@@ -36,7 +33,6 @@ def parse_html(html_content, url):
     print("Parsing HTML content for URL:", url)  # Debugging line
 
     # Extracting Company Name
-    # Extracting Company Name from the end of the URL
     company_name = urlparse(url).path.split('/')[-1]  # Get the last part of the URL path
     if not company_name or company_name == '':
         company_name = 'Home'  # Default to 'Home' if the last part is empty
@@ -124,7 +120,7 @@ def crawl_website(url, depth=0, max_depth=3):
         full_url = urljoin(url, link)
 
         # Only crawl internal links
-        if is_internal_link(full_url):
+        if is_internal_link(full_url, url):
             results = crawl_website(full_url, depth + 1, max_depth)
             if results:
                 for key in extracted_data:
@@ -132,19 +128,22 @@ def crawl_website(url, depth=0, max_depth=3):
 
     return extracted_data
 
-def is_internal_link(url):
+def is_internal_link(url, base_url):
     parsed_url = urlparse(url)
-    base_url = urlparse(TARGET_URL)
+    base_url_parsed = urlparse(base_url)
 
     # Normalize the URL by removing the fragment identifier
     normalized_url = parsed_url._replace(fragment='').geturl()
 
     # Return True only if it's an internal link and hasn't been visited
-    return (parsed_url.netloc == base_url.netloc or parsed_url.netloc == "") and normalized_url not in visited_urls
+    return (parsed_url.netloc == base_url_parsed.netloc or parsed_url.netloc == "") and normalized_url not in visited_urls
 
 
 def main():
-    extracted_data = crawl_website(TARGET_URL)
+    target_url = input("Please enter the target URL to crawl: ")  # Get user input for target URL
+    api_url = f'https://api.crawlbase.com/?token={CRAWLBASE_JS_TOKEN}&url={target_url}'
+
+    extracted_data = crawl_website(target_url)
 
     if extracted_data:
         save_to_csv(extracted_data)
