@@ -5,7 +5,7 @@ import re
 from urllib.parse import urljoin, urlparse
 
 
-CRAWLBASE_JS_TOKEN = 'Kgqhjo_5R_0BOYrJrNLLAA'
+CRAWLBASE_JS_TOKEN = '       '
 
 # Track visited URLs to avoid crawling the same page multiple times
 visited_urls = set()
