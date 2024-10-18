@@ -19,89 +19,81 @@ Before running the script, make sure you have the following dependencies install
 </ul>
 You can install the required packages with the following steps:
 <ol>
-<b><li>Go to the <a href="https://www.python.org/downloads/">Python Downloads page</a></li></b>
+<b><li>Go to the Python Downloads page</li></b>
 <ul>
-<li>Download Python 3.13.0</li></ul><br/>
+<li>Download <a href="https://www.python.org/downloads/">Python 3.13.0</a></li></ul><br/>
 
 <li><b>Install Python</b></li>
 <ul>
 <li>Run the downloaded installer</li>
 <li><b>Important</b>: During installation, check the box that says <b>"Add Python.exe to PATH"</b></li>
 <li>Click <b>"Install Now"</b> and follow the prompts to complete the installation</li></ul>
-<l
+<br/>
+<li><b>Download Git</b></li>
+<ul>
+<li>Go to the <a href="https://github.com/testingggdev/ACP-Webscraper">ACP-Webscraper</a> on GitHub</li>
+<li>Under '< >Code' Button, <b>Download ZIP</b></li>
+<li>Unzip file</li>
+</ul><br/>
+
+<li><b>Open Command Prompt (copy & paste these commands)</b></li>
+<ul>
+<li>cd C:\path\to\where\you\saved\the\download</li>
+<li>pip install requests beautifulsoup4 pandas</li>
+</ul></ol>
 
 
 
+<h2>To run the web scraper, simply execute the script as follows:</h2>
 
-Setup
-Clone the repository or download the script:
+In the command prompt: python main.py
 
-bash
-Copy code
-git clone https://github.com/your-repo/webscraper.git
-Set up the environment:
 
-It is recommended to create a virtual environment to manage dependencies:
-
-bash
-Copy code
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-Install dependencies:
-
-Run the following command to install the necessary dependencies:
-
-bash
-Copy code
-pip install -r requirements.txt
-Set the target URL:
-
-Open the main.py file and update the TARGET_URL variable with the URL of the website you want to scrape.
-
-python
-Copy code
-TARGET_URL = 'https://www.example.com'
-Set the Crawlbase API token:
-
-Update the CRAWLBASE_JS_TOKEN variable with your Crawlbase API token.
-
-python
-Copy code
-CRAWLBASE_JS_TOKEN = 'your_api_token_here'
-Usage
-Running the scraper:
-
-To run the web scraper, simply execute the script as follows:
-
-bash
-Copy code
-python main.py
-How it works:
+<h2>How it works:</h2>
+Update TARGET_URL = 'https://www.example.com' with your website <br/>
 
 The script will start by fetching the HTML content of the TARGET_URL.
-It will extract the company name, emails, and contact numbers from the page using regex patterns.
+It will extract the <b>company name, emails, and contact numbers</b> from the page using regex patterns.
 It will crawl internal links up to a specified depth (default is 3).
 The script will store extracted data in a CSV file and also create an HTML table with the extracted information.
-Output:
 
-The extracted data is saved as contact_info.csv.
-The HTML table version of the data is saved as contact_info.html.
+<h2>Output:</h2>
+The extracted data is saved as <b>contact_info.csv</b>.
+The HTML table version of the data is saved as <b>contact_info.html</b>.
 Both files will be available in the same directory as the script.
-Functions Overview
-get_html(api_url): Fetches the HTML content of the page using a GET request.
-parse_html(html_content, url): Parses the HTML to extract company name, emails, and phone numbers.
-save_to_csv(data, filename='contact_info.csv'): Saves the extracted data to a CSV file.
-crawl_website(url, depth=0, max_depth=3): Recursively crawls internal links of a website up to a specified depth.
-is_internal_link(url): Determines whether a URL is internal to the website.
-Example Output
-sql
-Copy code
-Final extracted data:
- Name       Email            Contact Number
---------------------------------------------
- ExampleCo  info@example.com  +65 1234 5678
- Home       support@example.com None
-Customization
-Modify the crawling depth: You can adjust the maximum depth for internal link crawling by modifying the max_depth parameter in the crawl_website function.
 
-Regex patterns: You can modify the regular expressions used to extract emails and phone numbers if the website uses different formats.
+<h2>Functions Overview:</h2>
+<b>get_html(api_url):</b> Fetches the HTML content of the page using a GET request.<br/>
+<b>parse_html(html_content, url):</b> Parses the HTML to extract company name, emails, and phone numbers.<br/>
+<b>save_to_csv(data, filename='contact_info.csv'):</b> Saves the extracted data to a CSV file.<br/>
+<b>crawl_website(url, depth=0, max_depth=3):</b> Recursively crawls internal links of a website up to a specified depth.<br/>
+<b>is_internal_link(url):</b> Determines whether a URL is internal to the website.
+<h2>Example Output</h2>
+
+Final extracted data:
+<table border="1">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Name</th>
+      <th>Email</th>
+      <th>Contact Number</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Home</td>
+      <td>jcscholarship@csit.gov.sg</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>about-us</td>
+      <td>cctp@csit.gov.sg</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>cybersecurity</td>
+      <td>hr@csit.gov.sg</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
