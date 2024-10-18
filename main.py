@@ -4,15 +4,15 @@ import pandas as pd
 import re
 from urllib.parse import urljoin, urlparse
 
+#insert Javascript token here in between the quotation
+CRAWLBASE_JS_TOKEN = ' '
 
-CRAWLBASE_JS_TOKEN = '       '
-
-# Track visited URLs to avoid crawling the same page multiple times
+#track visited URLs to avoid crawling the same page multiple times
 visited_urls = set()
 
 def get_html(api_url):
     try:
-        response = requests.get(api_url, timeout=10)  # Set a timeout of 10 seconds
+        response = requests.get(api_url, timeout=10)
         if response.status_code == 200:
             # Check if the response content type is HTML
             if 'text/html' in response.headers.get('Content-Type', ''):
@@ -30,24 +30,24 @@ def get_html(api_url):
 
 def parse_html(html_content, url):
     soup = BeautifulSoup(html_content, 'html.parser')
-    print("Parsing HTML content for URL:", url)  # Debugging line
+    print("Parsing HTML content for URL:", url)
 
-    # Extracting Company Name
-    company_name = urlparse(url).path.split('/')[-1]  # Get the last part of the URL path
+    #extracting Company Name
+    company_name = urlparse(url).path.split('/')[-1]  #get the last part of the URL path
     if not company_name or company_name == '':
-        company_name = 'Home'  # Default to 'Home' if the last part is empty
+        company_name = 'Home'  #default to 'Home' if the last part is empty
 
-    # Extract Email
-    emails = set()  # Use a set to store unique emails
+    #extract Email
+    emails = set()  #use a set to store unique emails
     email_pattern = re.compile(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+')
     for tag in soup.find_all(['p', 'span', 'div', 'a']):
-        # Search for emails in the text
+        #search for emails in the text
         email_match = email_pattern.search(tag.get_text())
         if email_match:
             emails.add(email_match.group().strip())
-        # Check for mailto links
+        #check for mailto links
         if tag.has_attr('href') and tag['href'].startswith('mailto:'):
-            emails.add(tag['href'].split(':', 1)[1].strip())  # Extract the email part
+            emails.add(tag['href'].split(':', 1)[1].strip())  
 
     # Extract Contact Number
     contact_number = None
@@ -59,21 +59,21 @@ def parse_html(html_content, url):
                 contact_number = phone_match.group().strip()
                 break
 
-    # Debugging output
+   
     print(f"Extracted - Name: {company_name}, Emails: {list(emails)}, Contact Number: {contact_number}")
 
-    return company_name, list(emails), contact_number  # Convert set to list
+    return company_name, list(emails), contact_number  
 
 
 def save_to_csv(data, filename='contact_info.csv'):
-    # Filter out None values and keep valid entries
+    #filter out None values and keep valid entries
     valid_names = [name for name in data['Name'] if name]
     valid_emails = [email for email in data['Email'] if
                     email and re.match(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', email)]
     valid_numbers = [number for number in data['Contact Number'] if
                      number and re.match(r'(\+65|\(65\))?\s?[689]\d{3}\s?\d{4}', number)]
 
-    # Create a DataFrame from the valid data, ensuring all columns are the same length
+    #create a DataFrame from the valid data, ensuring all columns are the same length
     max_length = max(len(valid_names), len(valid_emails), len(valid_numbers))
 
     final_data = {
@@ -84,15 +84,15 @@ def save_to_csv(data, filename='contact_info.csv'):
 
     df = pd.DataFrame(final_data)
 
-    # Save the DataFrame to a CSV file
+    #save the DataFrame to a CSV file
     df.to_csv(filename, index=False)
     print(f"Data saved to {filename}")
 
 def crawl_website(url, depth=0, max_depth=3):
     if depth > max_depth or url in visited_urls:
-        return None  # No valid data to return
+        return None  #no valid data to return
 
-    visited_urls.add(url)  # Add URL to visited list here
+    visited_urls.add(url)  #add URL to visited list here
     html_content = get_html(url)
     if not html_content:
         return None
