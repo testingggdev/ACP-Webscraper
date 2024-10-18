@@ -16,9 +16,16 @@ Before running the script, make sure you have the following dependencies install
 <li>Requests</li>
 <li>BeautifulSoup (from the bs4 package)</li>
 <li>Pandas</li>
+<li>Crawlbase API token</li>
 </ul>
 You can install the required packages with the following steps:
 <ol>
+<b><li>Crawlbase API Token</li></b>
+<ul>
+<li>Sign up <a href="https://crawlbase.com/signup">here</a></li>
+<li>Click this<a href="https://crawlbase.com/docs/crawling-api/#authentication"> link </a> to get your JavaScript token</li>
+<li>Copy the token </li>
+</ul><br/>
 <b><li>Go to the Python Downloads page</li></b>
 <ul>
 <li>Download <a href="https://www.python.org/downloads/">Python 3.13.0</a></li></ul><br/>
@@ -40,6 +47,10 @@ You can install the required packages with the following steps:
 <ul>
 <li>cd C:\path\to\where\you\saved\the\download</li>
 <li>pip install requests beautifulsoup4 pandas</li>
+<li>notepad main.py</li>
+<li>paste the JavaScript token into
+CRAWLBASE_JS_TOKEN = ' '</li>
+<li>Save file</li>
 </ul></ol>
 
 
